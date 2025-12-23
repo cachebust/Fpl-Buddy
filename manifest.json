@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Fpl-Buddy",
     "version": "1.0",
-    "description": "Injects a difficulty-colored 'Next 5 Fixtures' overlay into FPL Points and Transfers pages.",
+    "description": "Enhances the FPL interface by displaying each player's next five color‑coded fixtures with clear home/away indicators and concise team abbreviations. Adds smart stats, ownership data, and a cleaner, more intuitive layout for a smoother fantasy management experience.",
     "permissions": [
         "activeTab",
         "scripting",
