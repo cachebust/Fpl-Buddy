@@ -101,16 +101,16 @@ function createFixtureElement(fixture) {
     box.className = `fpl-fixture-box ${difficultyClass} ${fixture.isHome ? 'fixture-box-home' : 'fixture-box-away'}`;
 
     const opponent = teamsCache[fixture.opponentId];
-    let oppName = opponent ? opponent.short_name : '?';
+    let oppName = opponent ? opponent.short_name.toUpperCase() : '?';
 
     if (fixture.isHome) {
-        oppName = oppName.toUpperCase();
+        oppName += ' (H)';
     } else {
-        oppName = oppName.toLowerCase();
+        oppName += ' (A)';
     }
 
     box.innerText = oppName;
-    box.title = `${opponent ? opponent.name : 'Unknown '} (${fixture.isHome ? 'Home' : 'Away'}) - Diff: ${fixture.difficulty}`;
+    // box.title removed by request
     return box;
 }
 

@@ -40,9 +40,11 @@
 }
 
 /* Individual fixture box - Lozenge/Blob style */
+/* Individual fixture box - Lozenge/Blob style */
 .fpl-fixture-box {
-    width: 22px;
-    height: 18px;
+    width: auto;
+    min-width: 22px;
+    height: auto;
     /* Slightly rectangular */
     display: flex;
     align-items: center;
@@ -52,28 +54,14 @@
     font-weight: bold;
     color: #000;
     /* Default text color usually black/dark for visibility, white for dark backgrounds */
-    cursor: help;
+    cursor: default;
     position: relative;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    padding: 2px 4px;
 }
 
-/* Tooltip on hover */
-.fpl-fixture-box:hover::after {
-    content: attr(title);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 1000;
-    font-size: 11px;
-    pointer-events: none;
-    margin-bottom: 4px;
-}
+/* Tooltip removed by request */
 
 /* Difficulty Colors - Adjusted for "Classic" look */
 /* 2 - Green */
@@ -100,15 +88,7 @@
     color: #fff;
 }
 
-/* Home/Away indicator style */
-.fixture-box-home {
-    /* Uppercase usually takes more visual weight */
-    text-transform: uppercase;
-}
-
-.fixture-box-away {
-    text-transform: lowercase;
-}
+/* Home/Away indicator style - transforms handled in JS */
 
 /* 
    LAYOUT FLIP: "Classic"
