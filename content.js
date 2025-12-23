@@ -36,7 +36,14 @@ async function fetchData() {
             playersCache[code] = {
                 team: p.team,
                 selected_by_percent: p.selected_by_percent,
-                web_name: p.web_name
+                web_name: p.web_name,
+                element_type: p.element_type,
+                stats: {
+                    goals: p.goals_scored,
+                    assists: p.assists,
+                    clean_sheets: p.clean_sheets,
+                    goals_conceded: p.goals_conceded
+                }
             };
 
             if (!teamOwnership[p.team]) teamOwnership[p.team] = [];
@@ -121,6 +128,13 @@ function createOwnershipElement(percent) {
     return div;
 }
 
+function createStatsElement(text) {
+    const div = document.createElement('div');
+    div.className = 'fpl-stats-display';
+    div.innerText = text;
+    return div;
+}
+
 function findInjectionTarget(container) {
     const nameEl = container.querySelector('[class*="Element__Name"]') ||
         container.querySelector('[class*="ElementInTable__Name"]');
@@ -197,6 +211,7 @@ function injectFixtures(playerElement) {
     }
 
     let playerOwnership = null;
+    let foundPlayerData = null;
 
     if (playerNameEl) {
         const playerName = playerNameEl.textContent.trim();
@@ -207,6 +222,7 @@ function injectFixtures(playerElement) {
                 playerData.web_name.toLowerCase() === playerName.toLowerCase() &&
                 playerData.team === teamId) {
                 playerOwnership = playerData.selected_by_percent;
+                foundPlayerData = playerData;
                 foundMatch = true;
                 break;
             }
@@ -218,6 +234,7 @@ function injectFixtures(playerElement) {
                     (playerData.web_name.toLowerCase().includes(playerName.toLowerCase()) ||
                         playerName.toLowerCase().includes(playerData.web_name.toLowerCase()))) {
                     playerOwnership = playerData.selected_by_percent;
+                    foundPlayerData = playerData;
                     break;
                 }
             }
@@ -236,6 +253,28 @@ function injectFixtures(playerElement) {
         fixturesRow.appendChild(createFixtureElement(fix));
     });
     container.appendChild(fixturesRow);
+
+    if (foundPlayerData) {
+        const {
+            element_type,
+            stats
+        } = foundPlayerData;
+        let statsText = '';
+
+        if (element_type === 1) { // GKP
+            statsText = `CS: ${stats.clean_sheets}`;
+        } else if (element_type === 2) { // DEF
+            statsText = ``;
+        } else if (element_type === 3) { // MID
+            statsText = `G: ${stats.goals} A: ${stats.assists}`;
+        } else if (element_type === 4) { // FWD
+            statsText = `G: ${stats.goals} A: ${stats.assists}`;
+        }
+
+        if (statsText) {
+            container.appendChild(createStatsElement(statsText));
+        }
+    }
 
     const target = findInjectionTarget(playerElement);
 
