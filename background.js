@@ -4,5 +4,5 @@
 // if the host permissions are set for fantasy.premierleague.com.
 
 chrome.runtime.onInstalled.addListener(() => {
-    console.log('FPL Next 5 Fixtures Extension installed.');
+    console.log('Fpl-Buddy Extension installed.');
 });

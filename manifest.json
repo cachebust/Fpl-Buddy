@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "FPL Next 5 Fixtures Overlay",
+    "name": "Fpl-Buddy",
     "version": "1.0",
     "description": "Injects a difficulty-colored 'Next 5 Fixtures' overlay into FPL Points and Transfers pages.",
     "permissions": [
