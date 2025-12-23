@@ -1,0 +1,188 @@
+/* Container for the fixtures - works for both list and pitch views */
+.fpl-extension-container {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 4px;
+    z-index: 9999 !important;
+    /* Very high to ensure visibility */
+    position: relative !important;
+    background: transparent;
+    padding: 2px 0;
+    pointer-events: none;
+}
+
+/* Allow pointer events on children */
+.fpl-extension-container>* {
+    pointer-events: auto;
+}
+
+.fpl-next-fixtures {
+    display: flex;
+    gap: 1px;
+    /* Tighter gap */
+}
+
+.fpl-ownership-display {
+    font-size: 9px;
+    color: #fff;
+    background: rgba(55, 0, 60, 0.9);
+    /* FPL purple with opacity */
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: bold;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    margin-bottom: 3px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Individual fixture box - Lozenge/Blob style */
+.fpl-fixture-box {
+    width: 22px;
+    height: 18px;
+    /* Slightly rectangular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    font-weight: bold;
+    color: #000;
+    /* Default text color usually black/dark for visibility, white for dark backgrounds */
+    cursor: help;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Tooltip on hover */
+.fpl-fixture-box:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 1000;
+    font-size: 11px;
+    pointer-events: none;
+    margin-bottom: 4px;
+}
+
+/* Difficulty Colors - Adjusted for "Classic" look */
+/* 2 - Green */
+.fixture-diff-2 {
+    background-color: #01fc7a;
+    color: #000;
+}
+
+/* 3 - Grey/White */
+.fixture-diff-3 {
+    background-color: #e7e7e7;
+    color: #000;
+}
+
+/* 4 - Hard (Red) */
+.fixture-diff-4 {
+    background-color: #ff1751;
+    color: #fff;
+}
+
+/* 5 - Very Hard (Dark Red) */
+.fixture-diff-5 {
+    background-color: #80072d;
+    color: #fff;
+}
+
+/* Home/Away indicator style */
+.fixture-box-home {
+    /* Uppercase usually takes more visual weight */
+    text-transform: uppercase;
+}
+
+.fixture-box-away {
+    text-transform: lowercase;
+}
+
+/* 
+   LAYOUT FLIP: "Classic"
+   Pitch on LEFT, List on RIGHT.
+   Modern FPL (Transfers):
+   <div class="Layout__Main...">
+      <div class="Layout__Primary..."> (The List) </div>
+      <div class="Layout__Secondary..."> (The Pitch) </div>
+   </div>
+   We want Reverse.
+*/
+
+.fpl-extension-transfers-page div[class*="Layout__Main"] {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+}
+
+/* Ensure secondary (Pitch) takes appropriate width if needed, but flex usually handles it. 
+   Sometimes FPL uses grid. If grid:
+*/
+@media (min-width: 610px) {
+    /* If it's a grid, we might need specific column re-ordering, but flex row-reverse is surprisingly robust if we force display:flex. */
+}
+
+/* Pitch Element Tweaks to fit overlay */
+/* Position fixtures vertically beside player boxes to avoid layout disruption */
+
+/* Don't change the button height, keep natural layout */
+button:has(img[src*="/shirts/"]) {
+    position: relative !important;
+    overflow: visible !important;
+    /* Ensure fixtures aren't clipped */
+}
+
+/* Ensure parent containers don't clip the fixtures */
+button:has(img[src*="/shirts/"]):parent,
+div:has(> button img[src*="/shirts/"]) {
+    overflow: visible !important;
+}
+
+/* Position the fixture container to the right side of the player */
+button:has(img[src*="/shirts/"]) .fpl-extension-container {
+    position: absolute !important;
+    right: -25px !important;
+    /* Position to the right of the player box */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: auto !important;
+    margin-top: 0 !important;
+    flex-direction: column !important;
+    /* Stack fixtures vertically */
+    z-index: 99999 !important;
+    /* Ensure it's on top */
+}
+
+/* Make individual fixture boxes stack vertically */
+button:has(img[src*="/shirts/"]) .fpl-next-fixtures {
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+/* For pitch elements specifically, ensure no clipping at all levels */
+[class*="Pitch"],
+[class*="pitch"],
+[class*="PitchElement"],
+div:has(button img[src*="/shirts/"]),
+div:has(div button img[src*="/shirts/"]),
+div:has(div div button img[src*="/shirts/"]) {
+    overflow: visible !important;
+}
+
+/* Ensure the main pitch container doesn't clip */
+[data-testid*="pitch"],
+[class*="ElementList"],
+[class*="element-list"] {
+    overflow: visible !important;
+}

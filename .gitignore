@@ -1,0 +1,8 @@
+# FPL Extension files
+.DS_Store
+*.log
+
+# Chrome extension packaging
+*.pem
+*.crx
+*.zip
