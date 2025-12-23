@@ -176,8 +176,260 @@ div:has(div div button img[src*="/shirts/"]) {
 }
 
 /* Ensure the main pitch container doesn't clip */
+/* Ensure the main pitch container doesn't clip */
 [data-testid*="pitch"],
 [class*="ElementList"],
 [class*="element-list"] {
     overflow: visible !important;
+}
+
+/* Force table to expand ONLY on league pages */
+.fpl-buddy-league-page .Table-ziussd-1,
+.fpl-buddy-league-page table {
+    table-layout: auto !important;
+    width: 100% !important;
+}
+
+.fpl-buddy-league-page div[class*="Table"] {
+    overflow-x: visible !important;
+}
+
+/* Expand main layout to utilize full screen width ONLY on league pages */
+.fpl-buddy-league-page main,
+.fpl-buddy-league-page section,
+.fpl-buddy-league-page [class*="Layout__Main"],
+.fpl-buddy-league-page [class*="Layout__Content"],
+.fpl-buddy-league-page [class*="Page__Content"],
+.fpl-buddy-league-page [class*="Layout__Wrapper"],
+.fpl-buddy-league-page [class*="GeneralLayout"] {
+    max-width: 98vw !important;
+    width: 98vw !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* --- Fpl Buddy Flex Table System --- */
+
+/* Reset layout for our target table */
+table.fpl-buddy-table {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 100%;
+}
+
+/* Headers and Body need to be block containers */
+table.fpl-buddy-table thead,
+table.fpl-buddy-table tbody {
+    display: block !important;
+    width: 100% !important;
+}
+
+/* Rows become Flex Rows */
+table.fpl-buddy-table tr {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    width: 100% !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Cells (TH and TD) become blocks */
+table.fpl-buddy-table th,
+table.fpl-buddy-table td {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    text-align: center !important;
+    width: 70px;
+    /* Restored/Increased base width */
+    min-width: 70px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 8px 6px !important;
+    /* Restored padding */
+    height: auto !important;
+    box-sizing: border-box;
+    font-size: 14px !important;
+    /* Default-ish large font */
+}
+
+/* --- Specific Column Widths --- */
+
+/* Rank */
+table.fpl-buddy-table th:nth-child(1),
+table.fpl-buddy-table td:nth-child(1) {
+    width: 50px !important;
+    min-width: 50px !important;
+}
+
+/* Team & Manager */
+table.fpl-buddy-table th:nth-child(2),
+table.fpl-buddy-table td:nth-child(2) {
+    width: 350px !important;
+    min-width: 350px !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    flex-grow: 1;
+}
+
+/* GW / TOT */
+table.fpl-buddy-table th:nth-child(3),
+table.fpl-buddy-table td:nth-child(3),
+table.fpl-buddy-table th:nth-child(4),
+table.fpl-buddy-table td:nth-child(4) {
+    width: 65px !important;
+    min-width: 65px !important;
+}
+
+/* Added Columns Widths */
+/* OR (5) */
+table.fpl-buddy-table th:nth-child(5),
+table.fpl-buddy-table td:nth-child(5) {
+    width: 90px !important;
+}
+
+/* Last 5 (6) */
+table.fpl-buddy-table th:nth-child(6),
+table.fpl-buddy-table td:nth-child(6) {
+    width: 130px !important;
+    min-width: 130px !important;
+}
+
+/* TPB(7), PNTL(8), TV(9) */
+table.fpl-buddy-table th:nth-child(7),
+table.fpl-buddy-table td:nth-child(7),
+table.fpl-buddy-table th:nth-child(8),
+table.fpl-buddy-table td:nth-child(8),
+table.fpl-buddy-table th:nth-child(9),
+table.fpl-buddy-table td:nth-child(9) {
+    width: 70px !important;
+}
+
+/* GWT(10), TT(11) */
+table.fpl-buddy-table th:nth-child(10),
+table.fpl-buddy-table td:nth-child(10),
+table.fpl-buddy-table th:nth-child(11),
+table.fpl-buddy-table td:nth-child(11) {
+    width: 85px !important;
+}
+
+/* Captain(12) */
+table.fpl-buddy-table th:nth-child(12),
+table.fpl-buddy-table td:nth-child(12) {
+    width: 140px !important;
+    min-width: 140px !important;
+}
+
+/* Chip(13) */
+table.fpl-buddy-table th:nth-child(13),
+table.fpl-buddy-table td:nth-child(13) {
+    width: 65px !important;
+}
+
+/* Chips Hist(14) */
+table.fpl-buddy-table th:nth-child(14),
+table.fpl-buddy-table td:nth-child(14) {
+    width: 250px !important;
+    min-width: 250px !important;
+    white-space: normal !important;
+    font-size: 11px !important;
+    line-height: 1.2;
+}
+
+/* Team Button (15) */
+table.fpl-buddy-table th:nth-child(15),
+table.fpl-buddy-table td:nth-child(15) {
+    width: 50px !important;
+}
+
+/* Fpl Buddy Added Columns Header Style */
+th.fpl-buddy-col-header {
+    font-size: 12px !important;
+    text-transform: uppercase;
+    color: #fff !important;
+    font-weight: bold;
+    background: transparent;
+    border: none !important;
+}
+
+td.fpl-buddy-col {
+    font-size: 14px !important;
+    color: #fff !important;
+}
+
+.fpl-buddy-team-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #e90052;
+    background: #fff;
+    color: #e90052;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    outline: none;
+    margin: 0 auto;
+}
+
+.fpl-buddy-team-btn.open {
+    background: #e90052;
+    color: #fff;
+}
+
+/* Team List Container - Floating or Embedded? */
+/* Embedded looks cleaner in the cell but might widen row. 
+   The image shows it in the 'Team' column. */
+.fpl-buddy-team-list {
+    position: absolute;
+    right: 30px;
+    /* Adjust based on layout */
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    width: 140px;
+    border-radius: 4px;
+    overflow: hidden;
+    text-align: left;
+    margin-top: -10px;
+    /* Align near button */
+}
+
+/* Ensure the parent TD allows absolute positioning if we want it relative to cell */
+td.fpl-buddy-col {
+    position: relative;
+}
+
+.fpl-buddy-player-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 6px;
+    font-size: 11px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    color: #000;
+    font-weight: bold;
+}
+
+.fpl-buddy-player-pts {
+    font-weight: bold;
+}
+
+.fpl-buddy-bench-divider {
+    background: #e7e7e7;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.fpl-buddy-bench-player {
+    opacity: 0.8;
 }
