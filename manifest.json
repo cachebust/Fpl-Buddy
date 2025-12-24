@@ -16,6 +16,10 @@
         "48": "icons/icon128.png",
         "128": "icons/icon128.png"
     },
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "Fpl Buddy Settings"
+    },
     "content_scripts": [
         {
             "matches": [

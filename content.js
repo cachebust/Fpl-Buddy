@@ -286,6 +286,7 @@ function injectFixtures(playerElement) {
 }
 
 function runInjection() {
+    if (!teamsCache || !fixturesEnabled) return;
     const shirtImages = document.querySelectorAll('img[src*="/shirts/"]');
     if (shirtImages.length === 0) return;
 
@@ -328,19 +329,47 @@ function runInjection() {
     checkLayout();
 }
 
+let fixturesEnabled = true;
+
 const observer = new MutationObserver((mutations) => {
-    if (!teamsCache) return;
     runInjection();
 });
 
+function toggleFixtures(enabled) {
+    fixturesEnabled = enabled;
+    if (!enabled) {
+        // Remove the main wrapper container
+        document.querySelectorAll('.fpl-extension-container').forEach(el => el.remove());
+    } else {
+        runInjection();
+    }
+}
+
 (async () => {
+    // Load setting
+    chrome.storage.sync.get({ fixturesEnabled: true }, (items) => {
+        fixturesEnabled = items.fixturesEnabled;
+        if (fixturesEnabled) {
+            runInjection();
+        }
+    });
+
+    // Listen for changes
+    chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'sync' && changes.fixturesEnabled !== undefined) {
+            toggleFixtures(changes.fixturesEnabled.newValue);
+        }
+    });
+
     await fetchData();
-    runInjection();
+    if (fixturesEnabled) runInjection();
 
     const appRoot = document.body;
     observer.observe(appRoot, { childList: true, subtree: true, attributes: false });
 
     for (let i = 1; i <= 10; i++) {
-        setTimeout(runInjection, i * 500);
+        setTimeout(() => {
+            if (fixturesEnabled) runInjection();
+        }, i * 500);
     }
 })();

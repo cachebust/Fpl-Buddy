@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fpl Buddy Settings</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div class="popup-container">
+        <header>
+            <img src="icons/icon128.png" alt="Logo" class="logo">
+            <h1>Fpl Buddy</h1>
+        </header>
+
+        <div class="settings-list">
+            <div class="setting-item">
+                <div class="setting-info">
+                    <span class="setting-title">Next 5 Fixtures</span>
+                    <span class="setting-desc">Show difficulty colored fixtures and player stats.</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="fixturesEnabled" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="setting-item column-toggle-item">
+                <div class="setting-info">
+                    <span class="setting-title">Detailed Standings</span>
+                    <span class="setting-desc">Enhance the league standings table.</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="leagueEnabled" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div id="columnSettings" class="sub-settings">
+                <p class="sub-title">Visible Columns:</p>
+                <div class="column-grid">
+                    <label class="checkbox-container">OR
+                        <input type="checkbox" id="col_or" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">Last 5
+                        <input type="checkbox" id="col_last5" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">TPB
+                        <input type="checkbox" id="col_tpb" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">PNTL
+                        <input type="checkbox" id="col_pntl" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">TV
+                        <input type="checkbox" id="col_tv" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">GWT(C)
+                        <input type="checkbox" id="col_gwt" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">TT(C)
+                        <input type="checkbox" id="col_tt" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">Captain
+                        <input type="checkbox" id="col_captain" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">Chip
+                        <input type="checkbox" id="col_chip" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">Chips
+                        <input type="checkbox" id="col_chips" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">Team
+                        <input type="checkbox" id="col_team" checked>
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made for FPL Managers</p>
+        </footer>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

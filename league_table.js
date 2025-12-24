@@ -1,6 +1,38 @@
 // league_table.js
 console.log('Fpl-Buddy: league_table.js loaded');
 
+const COLUMN_DEFINITIONS = [
+    { id: 'col_or', label: 'OR' },
+    { id: 'col_last5', label: 'Last 5' },
+    { id: 'col_tpb', label: 'TPB' },
+    { id: 'col_pntl', label: 'PNTL' },
+    { id: 'col_tv', label: 'TV' },
+    { id: 'col_gwt', label: 'GWT(C)' },
+    { id: 'col_tt', label: 'TT(C)' },
+    { id: 'col_captain', label: 'Captain' },
+    { id: 'col_chip', label: 'Chip' },
+    { id: 'col_chips', label: 'Chips' },
+    { id: 'col_team', label: 'Team' }
+];
+
+let columnSettings = {
+    col_or: true,
+    col_last5: true,
+    col_tpb: true,
+    col_pntl: true,
+    col_tv: true,
+    col_gwt: true,
+    col_tt: true,
+    col_captain: true,
+    col_chip: true,
+    col_chips: true,
+    col_team: true
+};
+
+function getActiveColumns() {
+    return COLUMN_DEFINITIONS.filter(c => columnSettings[c.id]);
+}
+
 let hasInjectedHeaders = false;
 let bootstrapData = null;
 let currentEventId = null;
@@ -67,6 +99,7 @@ async function fetchEntryPicks(entryId, eventId) {
 }
 
 function processTable() {
+    if (!leagueEnabled) return;
     const table = document.querySelector('table');
     if (!table) return;
 
@@ -135,18 +168,16 @@ function injectHeaders(table) {
         return;
     }
 
-    const headers = [
-        'OR', 'Last 5', 'TPB', 'PNTL', 'TV', 'GWT(C)', 'TT(C)', 'Captain', 'Chip', 'Chips', 'Team'
-    ];
+    const activeCols = getActiveColumns();
+    console.log('Fpl-Buddy: Injecting headers:', activeCols.map(c => c.label).join(', '));
 
-    console.log('Fpl-Buddy: Appending headers to:', thead);
-
-    headers.forEach(h => {
+    activeCols.forEach(col => {
         const th = document.createElement('th');
-        th.innerText = h;
+        th.innerText = col.label;
         th.className = 'fpl-buddy-col-header';
         // Explicitly set scope/style to mimic existing
         th.setAttribute('scope', 'col');
+        th.dataset.fplBuddyColId = col.id;
         thead.appendChild(th);
     });
     console.log('Fpl-Buddy: Headers injected successfully.');
@@ -177,7 +208,7 @@ async function processRow(row) {
     if (!historyData || !picksData) {
         console.log(`Fpl-Buddy: Missing data for ${entryId}`);
         // Inject empty cells to keep layout
-        injectEmptyCells(row, 11);
+        injectEmptyCells(row);
         return;
     }
 
@@ -260,44 +291,48 @@ function convertChipName(name) {
     return map[name] || name;
 }
 
-function injectEmptyCells(row, count) {
-    for (let i = 0; i < count; i++) {
+function injectEmptyCells(row) {
+    const activeCols = getActiveColumns();
+    activeCols.forEach(() => {
         const td = document.createElement('td');
+        td.className = 'fpl-buddy-col';
         td.innerHTML = '-';
         row.appendChild(td);
-    }
+    });
 }
 
 function injectDataCells(row, stats, entryId) {
-    const values = [
-        stats.overallRank,
-        stats.last5Points,
-        stats.totalBench,
-        stats.totalHits,
-        stats.tv,
-        stats.gwtDisplay,
-        stats.ttDisplay,
-        stats.captainName,
-        stats.activeChip === 'None' ? '' : stats.activeChip,
-        stats.usedChips
-    ];
+    const activeCols = getActiveColumns();
 
-    values.forEach(v => {
+    activeCols.forEach(col => {
         const td = document.createElement('td');
         td.className = 'fpl-buddy-col';
-        td.textContent = v;
+        td.dataset.fplBuddyColId = col.id;
+
+        if (col.id === 'col_team') {
+            const btn = document.createElement('button');
+            btn.className = 'fpl-buddy-team-btn';
+            btn.textContent = '+';
+            btn.onclick = (e) => toggleTeamView(e, entryId, td);
+            td.appendChild(btn);
+        } else {
+            let val = '-';
+            switch (col.id) {
+                case 'col_or': val = stats.overallRank; break;
+                case 'col_last5': val = stats.last5Points; break;
+                case 'col_tpb': val = stats.totalBench; break;
+                case 'col_pntl': val = stats.totalHits; break;
+                case 'col_tv': val = stats.tv; break;
+                case 'col_gwt': val = stats.gwtDisplay; break;
+                case 'col_tt': val = stats.ttDisplay; break;
+                case 'col_captain': val = stats.captainName; break;
+                case 'col_chip': val = stats.activeChip === 'None' ? '' : stats.activeChip; break;
+                case 'col_chips': val = stats.usedChips; break;
+            }
+            td.textContent = val;
+        }
         row.appendChild(td);
     });
-
-    // Team Column (Expandable)
-    const teamTd = document.createElement('td');
-    teamTd.className = 'fpl-buddy-col';
-    const btn = document.createElement('button');
-    btn.className = 'fpl-buddy-team-btn';
-    btn.textContent = '+';
-    btn.onclick = (e) => toggleTeamView(e, entryId, teamTd);
-    teamTd.appendChild(btn);
-    row.appendChild(teamTd);
 }
 
 async function toggleTeamView(e, entryId, container) {
@@ -398,10 +433,47 @@ async function toggleTeamView(e, entryId, container) {
     btn.classList.add('open');
 }
 
+function resetAndProcessTable() {
+    // Cleanup first
+    document.querySelectorAll('.fpl-buddy-col, .fpl-buddy-col-header').forEach(el => el.remove());
+    document.querySelectorAll('[data-fpl-buddy-row-processed]').forEach(el => {
+        el.dataset.fplBuddyRowProcessed = "false";
+    });
+    const table = document.querySelector('table');
+    if (table) {
+        table.dataset.fplBuddyProcessed = "false";
+    }
+    // Then re-process
+    processTable();
+}
+
+let leagueEnabled = true;
+
+function toggleLeagueEnhancements(enabled) {
+    leagueEnabled = enabled;
+    if (!enabled) {
+        // Remove all injected columns and custom headers
+        document.querySelectorAll('.fpl-buddy-col, .fpl-buddy-col-header').forEach(el => el.remove());
+        // Remove processing flags
+        document.querySelectorAll('[data-fpl-buddy-row-processed]').forEach(el => {
+            el.dataset.fplBuddyRowProcessed = "false";
+        });
+        const table = document.querySelector('table.fpl-buddy-table');
+        if (table) {
+            table.classList.remove('fpl-buddy-table');
+            table.dataset.fplBuddyProcessed = "false";
+        }
+        // Remove page-wide expansion
+        document.body.classList.remove('fpl-buddy-league-page');
+    } else {
+        processTable();
+    }
+}
+
 // Observer
 const leagueObserver = new MutationObserver(() => {
     if (window.location.href.includes('/standings/')) {
-        processTable();
+        if (leagueEnabled) processTable();
     } else {
         // Cleanup class if we navigated away from standings
         if (document.body.classList.contains('fpl-buddy-league-page')) {
@@ -412,9 +484,57 @@ const leagueObserver = new MutationObserver(() => {
 
 leagueObserver.observe(document.body, { childList: true, subtree: true });
 
-// Initial Trigger
+// Load settings and initialize
+const defaultLeagueSettings = {
+    leagueEnabled: true,
+    col_or: true,
+    col_last5: true,
+    col_tpb: true,
+    col_pntl: true,
+    col_tv: true,
+    col_gwt: true,
+    col_tt: true,
+    col_captain: true,
+    col_chip: true,
+    col_chips: true,
+    col_team: true
+};
+
+chrome.storage.sync.get(defaultLeagueSettings, (items) => {
+    leagueEnabled = items.leagueEnabled;
+    COLUMN_DEFINITIONS.forEach(col => {
+        columnSettings[col.id] = items[col.id];
+    });
+
+    if (leagueEnabled && window.location.href.includes('/standings/')) {
+        processTable();
+    }
+});
+
+// Listen for changes
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === 'sync') {
+        if (changes.leagueEnabled !== undefined) {
+            toggleLeagueEnhancements(changes.leagueEnabled.newValue);
+        }
+
+        let columnChanged = false;
+        COLUMN_DEFINITIONS.forEach(col => {
+            if (changes[col.id] !== undefined) {
+                columnSettings[col.id] = changes[col.id].newValue;
+                columnChanged = true;
+            }
+        });
+
+        if (columnChanged && leagueEnabled) {
+            resetAndProcessTable();
+        }
+    }
+});
+
+// Initial URL check
 if (window.location.href.includes('/standings/')) {
-    processTable();
+    if (leagueEnabled) processTable();
 } else {
     document.body.classList.remove('fpl-buddy-league-page');
 }
