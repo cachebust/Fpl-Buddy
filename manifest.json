@@ -4,7 +4,6 @@
     "version": "1.0",
     "description": "Adds next five fixtures coloured by difficulty, player stats, and ownership data to FPL pages with a clean, optimized interface.",
     "permissions": [
-        "activeTab",
         "storage"
     ],
     "host_permissions": [
