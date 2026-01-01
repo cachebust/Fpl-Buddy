@@ -143,8 +143,6 @@ function findInjectionTarget(container) {
 }
 
 function injectFixtures(playerElement) {
-    if (playerElement.querySelector('.fpl-extension-container')) return;
-
     const img = playerElement.querySelector('img[src*="/shirts/"]') ||
         playerElement.querySelector('img');
 
@@ -167,12 +165,6 @@ function injectFixtures(playerElement) {
     }
 
     if (!teamData) return;
-
-    const fixtures = getNext5Fixtures(teamId);
-    if (!fixtures.length) return;
-
-    const container = document.createElement('div');
-    container.className = 'fpl-extension-container';
 
     // Try to find player name for individual TSB
     const allElements = Array.from(playerElement.querySelectorAll('*'));
@@ -210,12 +202,32 @@ function injectFixtures(playerElement) {
         playerNameEl = bestNameCandidate;
     }
 
+    const currentPlayerName = playerNameEl ? playerNameEl.textContent.trim() : '';
+
+    const existingContainer = playerElement.querySelector('.fpl-extension-container');
+    if (existingContainer) {
+        // Check if it's correct for this team/player
+        if (existingContainer.dataset.teamId === String(teamId) &&
+            existingContainer.dataset.playerName === currentPlayerName) {
+            return; // Already correct
+        }
+        // Otherwise, it's stale (reused DOM element in SPA), remove it
+        existingContainer.remove();
+    }
+
+    const fixtures = getNext5Fixtures(teamId);
+    if (!fixtures.length) return;
+
+    const container = document.createElement('div');
+    container.className = 'fpl-extension-container';
+    container.dataset.teamId = teamId;
+    container.dataset.playerName = currentPlayerName;
+
     let playerOwnership = null;
     let foundPlayerData = null;
 
     if (playerNameEl) {
-        const playerName = playerNameEl.textContent.trim();
-
+        const playerName = currentPlayerName;
         let foundMatch = false;
         for (const [code, playerData] of Object.entries(playersCache)) {
             if (playerData.web_name &&
