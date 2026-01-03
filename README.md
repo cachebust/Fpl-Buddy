@@ -41,5 +41,34 @@ Click the **Fpl Buddy** icon in your browser toolbar to:
 *   Enable/Disable the Detailed Standings enhancements.
 *   Select exactly which columns you want to see in your league tables to keep the interface as clean as you like.
 
+## ⚒️ Development
+
+If you're looking to contribute or customize **Fpl Buddy**, here's how to set up the development environment:
+
+### Prerequisites
+*   A Chromium-based browser (Chrome, Edge, Brave, etc.)
+*   Basic knowledge of JavaScript, CSS, and the Chrome Extension API.
+
+### Local Setup
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/cachebust/Fpl-Buddy.git
+    cd fpl-extension
+    ```
+2.  **Load the Extension**:
+    *   Open `chrome://extensions/`.
+    *   Enable **Developer mode**.
+    *   Click **Load unpacked** and select the `fpl-extension` directory.
+3.  **Live Debugging**:
+    *   Any changes made to the code will require a **refresh** of the extension on the `chrome://extensions/` page (click the 🔄 icon on the Fpl Buddy card).
+    *   To debug the popup, right-click the extension icon and select **Inspect**.
+    *   To debug content scripts, use the browser's developer tools on any FPL page.
+
+### Technical Architecture
+*   `content.js`: Handles DOM injection, fixture logic, and individual player stats.
+*   `league_table.js`: Purely focused on the league standings enhancements.
+*   `styles.css`: Contains all visual styles and layout overrides.
+*   `popup.js/html/css`: User settings interface.
+
 ## 📜 License
 MIT
